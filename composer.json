@@ -1,0 +1,22 @@
+{
+    "name": "oliveris/sdk-mail",
+    "description": "Sends email and campaigns to a provider specified.",
+    "keywords": ["Mail", "mailgun", "email", "Laravel"],
+    "type": "package",
+    "license": "MIT",
+    "authors": [{
+        "name": "Sam Oliveri",
+        "email": "samoliveri92@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Mail\\" : "Mail/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "mailgun/mailgun-php": "^2.6",
+        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/message": "^1.7"
+    }
+}
