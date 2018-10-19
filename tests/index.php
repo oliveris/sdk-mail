@@ -95,3 +95,42 @@ $mail->setDomain('staging.mycrystalhub.uk');
 //echo "Domain tags should should be retrieved";
 //echo "<br><hr><br>";
 
+// Test getting the domain bounces
+//echo "<pre>";
+//print_r($mail->getDomainBounces());
+//echo "</pre>";
+//
+//echo "Domain bounces should be retrieved";
+//echo "<br><hr><br>";
+
+// Test getting a single bounce#
+//echo "<pre>";
+//print_r($mail->getDomainSingleBounce('test2@test.com'));
+//echo "</pre>";
+//
+//echo "Domain single bounce should be retrieved";
+//echo "<br><hr><br>";
+
+// Test adding a bounce
+//echo "<pre>";
+//print_r($mail->addDomainBounce('test2@test.com'));
+//echo "</pre>";
+//
+//echo "Domain added to bounce list";
+//echo "<br><hr><br>";
+
+// Test deleting a bounce
+//echo "<pre>";
+//print_r($mail->deleteDomainBounce('test2@test.com'));
+//echo "</pre>";
+//
+//echo "Domain bounce should be removed from the list";
+//echo "<br><hr><br>";
+
+// Test deleting an entire bounce list
+//echo "<pre>";
+//print_r($mail->deleteDomainBounceList());
+//echo "</pre>";
+//
+//echo "Domain bounce list should be removed";
+//echo "<br><hr><br>";

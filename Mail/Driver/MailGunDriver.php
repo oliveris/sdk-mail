@@ -167,7 +167,74 @@ class MailGunDriver extends Mail
         }
 
         try {
-            return $mgClient->get($this->getDomain() . '/tags/' . $tag);
+            return $mgClient->delete($this->getDomain() . '/tags/' . $tag);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function getDomainBounces(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get($this->getDomain() . '/bounces');
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function getDomainSingleBounce(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->get($this->getDomain() . '/bounces/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function addDomainBounce(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->post($this->getDomain() . '/bounces', ['address' => $address]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDomainBounce(string $address = ''): object
+    {
+        $mgClient = new Mailgun ($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->delete($this->getDomain() . '/bounces/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDomainBounceList(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get($this->getDomain() . '/bounces');
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }
