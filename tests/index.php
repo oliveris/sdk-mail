@@ -54,12 +54,44 @@ $mail->setDomain('staging.mycrystalhub.uk');
 //echo "Single domain should be deleted";
 //echo "<br><hr><br>";
 
-
 // Test getting a domains events
-$mail->setDomain('staging.mycrystalhub.uk');
-echo "<pre>";
-print_r($mail->getDomainEvents());
-echo "</pre>";
+//$mail->setDomain('staging.mycrystalhub.uk');
+//echo "<pre>";
+//print_r($mail->getDomainEvents());
+//echo "</pre>";
+//
+//echo "Domains events should be retrieved";
+//echo "<br><hr><br>";
 
-echo "Domains events should be retrieved";
-echo "<br><hr><br>";
+// Test getting domain with different types of failures
+//echo "<pre>";
+//print_r($mail->getDomainEventsFailures());
+//echo "</pre>";
+//
+//echo "Domains events failures should be retrieved";
+//echo "<br><hr><br>";
+
+// Test getting the domains statistics
+//echo "<pre>";
+//print_r($mail->getDomainStats());
+//echo "</pre>";
+//
+//echo "Domain stats should be retrieved";
+//echo "<br><hr><br>";
+
+// Test getting the domains stats by events
+//echo "<pre>";
+//print_r($mail->getDomainStatsByEvents(['failed']));
+//echo "</pre>";
+//
+//echo "Domain stats should be retrieved";
+//echo "<br><hr><br>";
+
+// Test getting the domains stats
+//echo "<pre>";
+//print_r($mail->getDomainTags());
+//echo "</pre>";
+//
+//echo "Domain tags should should be retrieved";
+//echo "<br><hr><br>";
+
