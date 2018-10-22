@@ -7,7 +7,7 @@ use Mail\Mail;
 /**------ Testing the MailGun driver ------**/
 $mail = Mail::getDriver('mailgun');
 
-$mail->setKey('');
+$mail->setKey('key-9337ef899c7bc893f99849b222bac2bf');
 $mail->setDomain('staging.mycrystalhub.uk');
 
 // Test Sending

@@ -12,6 +12,10 @@ class MailGunDriver extends Mail
 {
     use HelpfulMethodsTrait;
 
+    protected $mailing_list_name;
+
+    protected $mailing_list_desc;
+
     public function send(): bool
     {
         $mgClient = new Mailgun($this->getKey());
@@ -235,6 +239,48 @@ class MailGunDriver extends Mail
 
         try {
             return $mgClient->get($this->getDomain() . '/bounces');
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function setDomainMailingListName(string $value = ''): string
+    {
+        if (!empty($value)) {
+            $this->mailing_list_name = $value;
+            return $this->mailing_list_name;
+        } else {
+            throw new Notify("Mailgun SDK Error: Mailing list name has not been set");
+        }
+    }
+
+    public function getDomainMailingListName(): string
+    {
+        if (isset($this->mailing_list_name)) {
+            return $this->mailing_list_name;
+        } else {
+            throw new Notify("Mailgun SDK Error: The mailing list name has not been set");
+        }
+    }
+
+    public function setDomainMailingListDescription(string $value = ''): string
+    {
+        if (!empty($value)) {
+            $this->mailing_list_desc = $value;
+            return $this->mailing_list_desc;
+        } else {
+            throw new Notify("Mailgun SDK Error: The mailing list description has not been set");
+        }
+    }
+
+    public function addDomainMailingList(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->post('lists', [
+                'address' => $this->getDomainMailingListName() . '@' . $this->getDomain()
+            ]);
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }

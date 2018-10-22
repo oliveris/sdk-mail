@@ -101,6 +101,16 @@ abstract class Mail
         }
     }
 
+    public function setToBatch(array $value = []): array
+    {
+        if (!empty($value)) {
+            $this->to = $value;
+            return $this->to;
+        } else {
+            throw new Notify("The to value cannot be empty");
+        }
+    }
+
     public function setCc(string $value = ""): string
     {
         if (preg_match(self::EMAIL_VALIDATION, $value)) {
