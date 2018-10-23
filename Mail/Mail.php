@@ -27,6 +27,8 @@ abstract class Mail
 
     protected $attachments;
 
+    protected $tags;
+
     const DEFAULT_DRIVER = 'mailgun';
 
     const EMAIL_VALIDATION = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i';
@@ -176,6 +178,21 @@ abstract class Mail
         return !empty($this->attachments) ? $this->attachments : [];
     }
 
+    public function clearTags(): array
+    {
+        return $this->tags = [];
+    }
+
+    public function setTags(array $value = []): array
+    {
+        if (!empty($value)) {
+            $this->tags = $value;
+            return $this->tags;
+        } else {
+            throw new Notify("The tags cannot be set to empty");
+        }
+    }
+
     public function compose(): array
     {
         if (isset($this->from, $this->to, $this->subject, $this->body)) {
@@ -188,6 +205,8 @@ abstract class Mail
             if (isset($this->subject)) $mail['subject'] = $this->subject;
             if (isset($this->body)) $mail['text'] = $this->body;
             if (isset($this->html)) $mail['html'] = $this->html;
+
+            if (isset($this->tags)) $mail = array_merge($mail, $this->tags);
 
             return $mail;
         } else {

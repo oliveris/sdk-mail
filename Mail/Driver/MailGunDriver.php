@@ -16,6 +16,8 @@ class MailGunDriver extends Mail
 
     protected $mailing_list_desc;
 
+    protected $mailing_list_member;
+
     public function send(): bool
     {
         $mgClient = new Mailgun($this->getKey());
@@ -177,6 +179,8 @@ class MailGunDriver extends Mail
         }
     }
 
+    /**----- Domain bounces -----**/
+
     public function getDomainBounces(): object
     {
         $mgClient = new Mailgun($this->getKey());
@@ -244,10 +248,12 @@ class MailGunDriver extends Mail
         }
     }
 
+    /**----- Mailing lists -----**/
+
     public function setDomainMailingListName(string $value = ''): string
     {
         if (!empty($value)) {
-            $this->mailing_list_name = $value;
+            $this->mailing_list_name = str_replace(' ', '-', strtolower($value));
             return $this->mailing_list_name;
         } else {
             throw new Notify("Mailgun SDK Error: Mailing list name has not been set");
@@ -273,14 +279,221 @@ class MailGunDriver extends Mail
         }
     }
 
+    public function getMailingListDescription(): string
+    {
+        if (isset($this->mailing_list_desc)) {
+            return $this->mailing_list_desc;
+        } else {
+            throw new Notify("Mailgun SDK Error: The mailing list description needs to be set");
+        }
+    }
+
     public function addDomainMailingList(): object
     {
         $mgClient = new Mailgun($this->getKey());
 
         try {
             return $mgClient->post('lists', [
-                'address' => $this->getDomainMailingListName() . '@' . $this->getDomain()
+                'address'     => $this->getDomainMailingListName() . '@' . $this->getDomain(),
+                'description' => $this->getMailingListDescription()
             ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function setMailingListMember(array $value = []): array
+    {
+        if (!array_key_exists('address', $value)) {
+            throw new Notify("Mailgun SDK Error: The value \'address\' needs to be set");
+        }
+
+        if (!array_key_exists('name', $value)) {
+            throw new Notify("Mailgun SDK Error: The value \'name\' needs to be set");
+        }
+
+        if (!array_key_exists('description', $value)) {
+            throw new Notify("Mailgun SDK Error: The value \'description\' needs to be set");
+        }
+
+        if (!array_key_exists('subscribed', $value)) {
+            throw new Notify("Mailgun SDK Error: The value \'subscribed\' needs to be set");
+        }
+
+        if (!array_key_exists('vars', $value)) {
+            throw new Notify("Mailgun SDK Error: The value \'vars\' needs to be set");
+        }
+
+        return $this->mailing_list_member = $value;
+    }
+
+    public function getDomainMailingListMember(): array
+    {
+        if (isset($this->mailing_list_member)) {
+            return $this->mailing_list_member;
+        } else {
+            throw new Notify("Mailgun SDK Error: The mailing list member needs to be set");
+        }
+    }
+
+    public function addDomainMailingListMember(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->post('lists/' . $this->getDomainMailingListName() . '@' . $this->getDomain() . '/members',
+                $this->getMailingListMember());
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    /** Unsubscribes **/
+
+    public function getDomainUnsubscribes(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get($this->getDomain() . '/unsubscribes', [
+                'limit' => 5,
+                'skip'  => 10
+            ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun error: " . $e->getMessage());
+        }
+    }
+
+    public function getDomainSingleUnsubscribe(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->get($this->getDomain() . '/unsubscribes/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun error: " . $e->getMessage());
+        }
+    }
+
+    public function addDomainUnsubscribe(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->post($this->getDomain() . '/unsubscribes', [
+                'address' => $address,
+                'tag'     => '*'
+            ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDomainUnsubscribe(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->delete($this->getDomain() . '/unsubscribes/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    /** Complaints **/
+
+    public function getDomainComplaints(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get($this->getDomain() . '/complaints', [
+                'limit' => 10,
+                'skip'  => 5
+            ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function getDomainSingleComplaint(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->get($this->getDomain() . '/complaints/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function addDomainSingleComplaint(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->post($this->getDomain() . '/complaints', [
+                'address' => $address
+            ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDomainSingleComplaint(string $address = ''): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        if (empty($address)) {
+            throw new Notify("Mailgun SDK Error: No address has been set");
+        }
+
+        try {
+            return $mgClient->delete($this->getDomain() . '/complaints/' . $address);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    /** Webhooks **/
+
+    public function getDomainWebhooks(): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get('domains/' . $this->getDomain() . '/webhooks');
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function getDomainWebhooksByEvent(string $event): object
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->get($this->getDomain() . '/webhooks/' . $event);
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }

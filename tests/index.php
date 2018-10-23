@@ -134,3 +134,69 @@ $mail->setDomain('staging.mycrystalhub.uk');
 //
 //echo "Domain bounce list should be removed";
 //echo "<br><hr><br>";
+
+// Test creating a mailing list
+//$mail->setDomainMailingListName('Testing List');
+//$mail->setDomainMailingListDescription('This is a testing mailing list description');
+//echo "<pre>";
+//print_r($mail->addDomainMailingList());
+//echo "</pre>";
+//
+//echo "The testing domains mailing list should be created";
+//echo "<br><hr><br>";
+
+// Testing a scheduled delivery
+//$mail->setTo('sam.oliveri@usaycompare.com');
+//$mail->setFrom('samoliveri92@gmail.com');
+//$mail->setSubject('This is a test subject');
+//$mail->setBody('Lorem ipsum dolor sit amet, mollis hendrerit vix at. Altera meliore signiferumque vix an. Sonet delectus assentior eu sed, cu meliore ponderum quo. At quo idque virtute. Impedit mentitum est ei, assum abhorreant eam cu.');
+//$mail->setTags(['o:deliverytime' => date('D, d F Y 15:15:00 -0000')]);
+//$mail->send();
+//
+//echo "Mail should be scheduled to send at 3:15pm";
+//echo '<br><hr><br>';
+
+// Test to get the domains unsubscribes
+//$mail->setDomain('staging.mycrystalhub.uk');
+//echo "<pre>";
+//print_r($mail->getDomainUnsubscribes());
+//echo "</pre>";
+//
+//echo "The domains unsubscribe list should be displayed below";
+//echo "<br><hr><br>";
+
+// Test to add an address to the unsubscribe list
+//$mail->setDomain('staging.mycrystalhub.uk');
+//echo "<pre>";
+//print_r($mail->addDomainUnsubscribe('test-unsub@test.com'));
+//echo "</pre>";
+//
+//echo "Address should be added to the domain unsubscribe list";
+//echo "<br><hr><br>";
+
+// Test to delete an address from the unsubscribe list
+//$mail->setDomain('staging.mycrystalhub.uk');
+//echo "<pre>";
+//print_r($mail->deleteDomainUnsubscribe('test-unsub@test.com'));
+//echo "</pre>";
+//
+//echo "Address should be removed from the domain unsubscribe list";
+//echo "<br><hr><br>";
+
+// Test to add a complaint to a domain
+//$mail->setDomain('staging.mycrystalhub.uk');
+//echo "<pre>";
+//print_r($mail->addDomainSingleComplaint('test-addcomplaint@test.com'));
+//echo "</pre>";
+//
+//echo "Address should be a complaint against the domain";
+//echo "<br><hr><br>";
+
+// Test to remove a complaint from a domain
+$mail->setDomain('staging.mycrystalhub.uk');
+echo "<pre>";
+print_r($mail->deleteDomainSingleComplaint('test-addcomplaint@test.com'));
+echo "</pre>";
+
+echo "Address should be removed from the domain";
+echo "<br><hr><br>";
