@@ -32,7 +32,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomains(array $options = []): object
+    public function getDomains(array $options = [])
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -44,7 +44,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getSingleDomain(): object
+    public function getSingleDomain()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -55,7 +55,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomain(): object
+    public function addDomain()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -69,7 +69,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomain(): object
+    public function deleteDomain()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -80,7 +80,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainEvents(array $options = []): object
+    public function getDomainEvents(array $options = [])
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -99,7 +99,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainEventsFailures(): object
+    public function getDomainEventsFailures()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -112,7 +112,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainStatsAll(): object
+    public function getDomainStatsAll()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -128,7 +128,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainStatsByEvents(array $events): object
+    public function getDomainStatsByEvents(array $events)
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -149,7 +149,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainTags(array $options = []): object
+    public function getDomainTags(array $options = [])
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -164,7 +164,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomainTag(string $tag = ''): object
+    public function deleteDomainTag(string $tag = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -181,7 +181,7 @@ class MailGunDriver extends Mail
 
     /**----- Domain bounces -----**/
 
-    public function getDomainBounces(): object
+    public function getDomainBounces()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -192,7 +192,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainSingleBounce(string $address = ''): object
+    public function getDomainSingleBounce(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -207,7 +207,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomainBounce(string $address = ''): object
+    public function addDomainBounce(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -222,7 +222,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomainBounce(string $address = ''): object
+    public function deleteDomainBounce(string $address = '')
     {
         $mgClient = new Mailgun ($this->getKey());
 
@@ -237,7 +237,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomainBounceList(): object
+    public function deleteDomainBounceList()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -288,7 +288,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomainMailingList(): object
+    public function addDomainMailingList()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -297,6 +297,17 @@ class MailGunDriver extends Mail
                 'address'     => $this->getDomainMailingListName() . '@' . $this->getDomain(),
                 'description' => $this->getMailingListDescription()
             ]);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteDomainMailingList()
+    {
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            return $mgClient->delete('lists/' . $this->getDomainMailingListName());
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }
@@ -336,13 +347,13 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomainMailingListMember(): object
+    public function addDomainMailingListMember()
     {
         $mgClient = new Mailgun($this->getKey());
 
         try {
-            return $mgClient->post('lists/' . $this->getDomainMailingListName() . '@' . $this->getDomain() . '/members',
-                $this->getMailingListMember());
+            return $mgClient->post('lists/' . $this->getDomainMailingListName() . '/members',
+                $this->getDomainMailingListMember());
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }
@@ -350,7 +361,7 @@ class MailGunDriver extends Mail
 
     /** Unsubscribes **/
 
-    public function getDomainUnsubscribes(): object
+    public function getDomainUnsubscribes()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -364,7 +375,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainSingleUnsubscribe(string $address = ''): object
+    public function getDomainSingleUnsubscribe(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -379,7 +390,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomainUnsubscribe(string $address = ''): object
+    public function addDomainUnsubscribe(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -397,7 +408,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomainUnsubscribe(string $address = ''): object
+    public function deleteDomainUnsubscribe(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -414,7 +425,7 @@ class MailGunDriver extends Mail
 
     /** Complaints **/
 
-    public function getDomainComplaints(): object
+    public function getDomainComplaints()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -428,7 +439,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainSingleComplaint(string $address = ''): object
+    public function getDomainSingleComplaint(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -443,7 +454,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function addDomainSingleComplaint(string $address = ''): object
+    public function addDomainSingleComplaint(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -460,7 +471,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function deleteDomainSingleComplaint(string $address = ''): object
+    public function deleteDomainSingleComplaint(string $address = '')
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -477,7 +488,7 @@ class MailGunDriver extends Mail
 
     /** Webhooks **/
 
-    public function getDomainWebhooks(): object
+    public function getDomainWebhooks()
     {
         $mgClient = new Mailgun($this->getKey());
 
@@ -488,7 +499,7 @@ class MailGunDriver extends Mail
         }
     }
 
-    public function getDomainWebhooksByEvent(string $event): object
+    public function getDomainWebhooksByEvent(string $event)
     {
         $mgClient = new Mailgun($this->getKey());
 
