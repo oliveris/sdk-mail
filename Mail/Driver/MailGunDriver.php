@@ -307,7 +307,7 @@ class MailGunDriver extends Mail
         $mgClient = new Mailgun($this->getKey());
 
         try {
-            return $mgClient->delete('lists/' . $this->getDomainMailingListName());
+            return $mgClient->delete('lists/' . $this->getDomainMailingListName() . '@' . $this->getDomain());
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }

@@ -8,7 +8,7 @@ use Mail\Mail;
 $mail = Mail::getDriver('mailgun');
 
 $mail->setKey('');
-$mail->setDomain('');
+//$mail->setDomain('');
 
 // Test Sending
 //$mail->setTo('');
@@ -143,6 +143,16 @@ $mail->setDomain('');
 //echo "</pre>";
 //
 //echo "The testing domains mailing list should be created";
+//echo "<br><hr><br>";
+
+// Test Deleting a mailing list
+//$mail->setDomain();
+//$mail->setDomainMailingListName('test-contact-list_a');
+//echo "<pre>";
+//print_r($mail->deleteDomainMailingList());
+//echo "</pre>";
+//
+//echo "The test mailing list should be deleted successfully";
 //echo "<br><hr><br>";
 
 // Testing a scheduled delivery
