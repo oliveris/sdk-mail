@@ -18,6 +18,8 @@ class MailGunDriver extends Mail
 
     protected $mailing_list_member;
 
+    protected $address;
+
     public function send(): bool
     {
         $mgClient = new Mailgun($this->getKey());
@@ -505,6 +507,26 @@ class MailGunDriver extends Mail
 
         try {
             return $mgClient->get($this->getDomain() . '/webhooks/' . $event);
+        } catch (Exception $e) {
+            throw new Notify("Mailgun Error: " . $e->getMessage());
+        }
+    }
+
+    /** Email Validation **/
+
+    public function validateAddress(string $address): bool
+    {
+        if (!preg_match(self::EMAIL_VALIDATION, $address)) {
+            throw new Notify("Mailgun SDK Error: The provided address {$address} is not valid");
+        }
+
+        $mgClient = new Mailgun($this->getKey());
+
+        try {
+            $result = $mgClient->get('address/validate', [
+                'address' => $address
+            ]);
+            return $result->http_response_body->is_valid;
         } catch (Exception $e) {
             throw new Notify("Mailgun Error: " . $e->getMessage());
         }

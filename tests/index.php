@@ -7,8 +7,8 @@ use Mail\Mail;
 /**------ Testing the MailGun driver ------**/
 $mail = Mail::getDriver('mailgun');
 
-$mail->setKey('');
-//$mail->setDomain('');
+// $mail->setKey('');
+// $mail->setDomain('');
 
 // Test Sending
 //$mail->setTo('');
@@ -210,3 +210,13 @@ $mail->setKey('');
 //
 //echo "Address should be removed from the domain";
 //echo "<br><hr><br>";
+
+// Test to validate an address
+// Uses public key NOT private
+// $mail->setKey('');
+// echo "<pre>";
+// echo $mail->validateAddress('');
+// echo "</pre>";
+
+// echo "Address should now validated";
+// echo "<br><hr><br>";
